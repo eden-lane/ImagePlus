@@ -1,0 +1,31 @@
+{
+  "name": "Image+",
+  "manifest_version": 2,
+  "version": "2.0.0",
+  "default_locale": "en",
+  "background": {
+    "scripts": ["scripts/index.js"]
+  },
+  "description": "__MSG_extDescr__",
+  "permissions" : [
+    "tabs",
+    "contextMenus",
+    "<all_urls>",
+    "notifications",
+    "storage",
+    "identity"
+  ],
+  "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDKccFWzqMaDL5LYXSPOCYzXN4SrigI+DOBnzTTadw1ir8irzkDixr26HMLanuYJK4vLIkNgIPxV0vTsAJkov7hl9Kg+HKTC7eejbDa2WF3QgAGLJlHwYI8cTan5rpILbj126Y28wL842UE6GHzDh9YV/ZuFd16GLW0GRDp2dAr/QIDAQAB",
+  "oauth2": {
+    "client_id": "44590950968-jkvhhb5il2eumhtm2pgrs456tadmu493.apps.googleusercontent.com",
+    "scopes": [
+      "https://picasaweb.google.com/data/"
+    ]
+  },
+  "options_page" : "pages/options.html",
+  "icons" : {
+    "16": "img/icon16.png",
+    "48": "img/icon48.png",
+    "128": "img/icon128.png"
+  }
+}

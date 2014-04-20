@@ -1,0 +1,45 @@
+{
+	"extDescr": {
+		"message": "Save images into Google+ Albums from context menu"
+	},
+
+	"allAlbums": {
+		"message": "All albums"
+	},
+
+	"filters": {
+		"message": "Filters"
+	},
+
+	"resultAlbums": {
+		"message": "Albums that will be"
+	},
+
+	"hided" : {
+		"message": "hided"
+	},
+
+	"shown" : {
+		"message": "shown"
+	},
+
+	"regExpHint" : {
+		"message": "You can add <b>RegExp</b> pattern or album name to hide or show only specific items in context menu."
+	},
+
+	"howToAddHint" : {
+		"message": "Use double click to add or remove items."
+	},
+
+	"settingsTitle" : {
+		"message": "Settings"
+	},
+
+	"savingOK": {
+		"message": "Image saved !"
+	},
+
+	"savingError": {
+		"message": "Saving error."
+	}
+}

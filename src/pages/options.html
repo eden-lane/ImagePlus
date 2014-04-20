@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<head>
+	<script type="text/javascript" src="../scripts/jquery.min.js"></script>
+	<script type="text/javascript" src="../scripts/options.js"></script>
+	<title data-message="settingsTitle">Settings</title>
+	<style>
+		body {
+			font-family: Calibri;
+			font-size: 14px;
+		}
+
+		select, input {
+			padding: 2px 0;
+			border: 1px solid #eee;
+			outline: none;
+			border: none;
+			box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+			font-family: Calibri;
+			font-size: 14px;
+		}
+
+		select {
+			height: 80%;
+		}
+
+		h5 {
+			font-size: 13px;
+			margin: 0;
+		}
+
+		input[type="radio"] {
+			display: none;
+		}
+
+		input[type="radio"] + label {
+			font-size: 12px;
+			color: #999;
+			cursor: pointer;
+		}
+
+		input[type="radio"]:checked + label {
+			border-bottom: 1px solid #222;
+			color: #000;
+		}
+
+		.settings {
+			margin: 50px auto;
+			width: 50%;
+			height: 80%;
+		}
+
+		#matched{
+			margin-top: 22px;
+		}
+
+		.block {
+			padding: 5px;
+			height: 95%;
+			width: 31%;
+		}
+
+		.block select {
+			min-height: 500px;
+		}
+
+		.block option {
+			border-left: 1px solid #393;
+		}
+
+		.fill {
+			width: 100%;
+		}
+
+		.float-left {
+			float: left;
+		}
+
+		.info {
+			padding-bottom: 3px;
+		}
+
+		#albums {
+			margin-top: 24px;
+		}
+
+		::-webkit-scrollbar {
+		    width: 4px;
+		}
+
+		::-webkit-scrollbar-track {
+		    border-radius: 2px;
+		}
+
+		::-webkit-scrollbar-thumb {
+		    border-radius: 2px;
+		    background-color: #888;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="settings">
+	<div class="info"><span data-message="regExpHint"></span><br />
+		<span data-message="howToAddHint">Use double click to add or remove items.</span>
+	</div>
+		<div class="float-left block">
+			<h5><span data-message="allAlbums">All albums</span>:</h5>
+			<select name="albums[]" size="12" id="albums" multiple="multiple" class="float-left fill">
+			</select>
+		</div>
+		<div class="float-left block">
+			<h5><span data-message="filters">Filters</span>:</h5>
+			<input type="text" id="pattern-input" class="float-left fill"/><br>
+			<select name="patterns[]" size="10" id="patterns" class="float-left fill">
+
+			</select>
+		</div>
+		<div class="float-left block">
+			<h5><span data-message="resultAlbums">Albums that will be</span>
+				<input type="radio" id="black" name="list_type" value="black" /><label data-message="hided" for="black">hided</label>
+	        	<input type="radio" id="white" name="list_type" value="white" /><label data-message="shown" for="white">shown</label>:
+	        </h5>
+			<div id="matched">
+
+			</div>
+		</div>
+	</div>
+
+</body>
