@@ -16,6 +16,7 @@
     "storage",
     "identity"
   ],
+  "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDKccFWzqMaDL5LYXSPOCYzXN4SrigI+DOBnzTTadw1ir8irzkDixr26HMLanuYJK4vLIkNgIPxV0vTsAJkov7hl9Kg+HKTC7eejbDa2WF3QgAGLJlHwYI8cTan5rpILbj126Y28wL842UE6GHzDh9YV/ZuFd16GLW0GRDp2dAr/QIDAQAB",
   "oauth2": {
     "client_id": "44590950968-jkvhhb5il2eumhtm2pgrs456tadmu493.apps.googleusercontent.com",
     "scopes": [
