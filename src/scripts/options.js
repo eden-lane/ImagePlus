@@ -1,72 +1,56 @@
 var picasaApiUrl = "https://picasaweb.google.com/data/feed/api/user/default/albumid/";
 
-var oauth = ChromeExOAuth.initBackgroundPage({
-  'request_url': 'https://www.google.com/accounts/OAuthGetRequestToken',
-  'authorize_url': 'https://www.google.com/accounts/OAuthAuthorizeToken',
-  'access_url': 'https://www.google.com/accounts/OAuthGetAccessToken',
-  'consumer_key': 'anonymous',
-  'consumer_secret': 'anonymous',
-  'scope': 'https://picasaweb.google.com/data/',
-  'app_name': 'Image+'
-});
-
 document.addEventListener("DOMContentLoaded", function () {
 
-	var objects = document.getElementsByTagName('*'), i;
-	for (i = 0; i < objects.length; i++) {
-		if (objects[i].dataset && objects[i].dataset.message) {
-			console.log(objects[i].dataset.message);
+  var objects = document.getElementsByTagName('*'), i;
+  for (i = 0; i < objects.length; i++) {
+    if (objects[i].dataset && objects[i].dataset.message) {
+      objects[i].innerHTML = chrome.i18n.getMessage(objects[i].dataset.message);
+    }
+  }
 
-			objects[i].innerHTML = chrome.i18n.getMessage(objects[i].dataset.message);
-		}
-	}
+  reloadAlbumList();
 
-	oauth.authorize(function() {
-		reloadAlbumList();
-	});
+  $("#patterns").dblclick(removePattern);
 
-	$("#patterns").dblclick(removePattern);
+  $("#albums").dblclick(function (ev) {
+    addPattern(t);
+  });
 
-	$("#albums").dblclick(function (ev) {
-		addPattern(ev.srcElement.text);
-	});
+  $("#pattern-input").keydown(function (ev) {
+    if (ev.which == 13) {
+        addPattern($(this).val());
+        $(this).val("");
+    }
+  });
 
-	$("#pattern-input").keydown(function (ev) {
-		if (ev.which == 13) {
-			addPattern($(this).val());
-			$(this).val("");
-		}
-	});
-
-	$("input[type=radio]").click(saveListType);
+  $("input[type=radio]").click(saveListType);
 
 });
 
-function addPattern(pt) {
-	$("#patterns").append($("<option></option>").attr("value", pt).text(pt));
-	showMatched();
-	save();
+function addPattern(ev) {
+  $("#patterns").append($("<option></option>").attr("value", pt).text(pt));
+  showMatched();
+  save();
 };
 
 function removePattern(ev) {
-	$(ev.srcElement).remove();
-	showMatched();
-	save();
+  $(ev.srcElement).remove();
+  showMatched();
+  save();
 };
 
+/*
+ * Getting list of albums from picasa's user profile
+ */
 function getAlbums() {
-	oauth.sendSignedRequest('https://picasaweb.google.com/data/feed/api/user/default', function(response) {
-		buildAlbumList(response);
-		load();
-	});
-}
-
-function buildAlbumList(xml) {
-	var list = $("#albums");
-	$("entry", xml).each(function () {
-		var title = $(this).find("title").text();
-		list.append($("<option></option>").attr("value", title).text(title));
-	});
+  var bp = chrome.extension.getBackgroundPage(),
+      $list = $("#albums");
+  bp.reloadAlbums(function (albums) {
+    for (var i = 0, max = albums.length; i < max; i++) {
+      $list.append($("<option></option>").attr("value", albums[i].title).text(albums[i].title));
+    };
+  });
 }
 
 function reloadAlbumList() {
