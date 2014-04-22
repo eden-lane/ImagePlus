@@ -1,8 +1,13 @@
 var gulp = require('gulp'),
-    zip = require('gulp-zip');
+    zip = require('gulp-zip'),
+    debug = require('gulp-debug');
+
+var files = [
+  'src/**'
+];
 
 gulp.task('build', function () {
-  gulp.src('src/*')
+  gulp.src(files)
     .pipe(zip('image-plus.zip'))
     .pipe(gulp.dest('build'));
 });
