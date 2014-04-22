@@ -3,7 +3,8 @@ chrome.identity.getAuthToken({'interactive': true}, function (token) {
 })
 
 var USER_INFO = 'https://picasaweb.google.com/data/feed/api/user/default',
-    TEST_ID = 'https://picasaweb.google.com/data/feed/api/user/107068484345384148331/albumid/6004394524595870353';
+    TEST_ID = 'https://picasaweb.google.com/data/feed/api/user/107068484345384148331/albumid/6004394524595870353',
+    ICON_URL = chrome.extension.getURL('img/icon128.png');
     //https://picasaweb.google.com/data/feed/api/user/userID/albumid/albumID
 
 /*
@@ -19,7 +20,6 @@ var reloadAlbums = function () {
       for (var i = 0, l = all.length; i < l; i++) {
         id = all[i].getElementsByTagName("id")[0].innerHTML;
         title = all[i].getElementsByTagName("title")[0].innerHTML;
-        console.log(id, title);
       };
     }
   };
@@ -27,9 +27,17 @@ var reloadAlbums = function () {
 };
 
 
+var notificate = function (isSuccess, imageUrl) {
+  chrome.notifications.create("", {
+    type: isSuccess ? 'image' : 'basic',
+    title: 'Image+',
+    message: isSuccess ? chrome.i18n.getMessage("savingOK") : chrome.i18n.getMessage("savingError"),
+    iconUrl: ICON_URL,
+    imageUrl: imageUrl
+  }, function () {});
+}
 
 var sendToAlbum = function (params) {
-  console.log(params);
   var albumId = TEST_ID,
       url = params.srcUrl;
 
@@ -45,8 +53,11 @@ var sendToAlbum = function (params) {
       xhr.setRequestHeader("Content-Type", 'image/jpeg');
       xhr.setRequestHeader("Slug", "MyTestImage");
       xhr.onload = function () {
-        console.log(xhr);
-        x = xhr;
+        if (xhr.status == 201) {
+          notificate(true, url);
+        } else {
+          notificate(false);
+        }
       }
       chrome.identity.getAuthToken({'interactive': true}, function (token) {
         xhr.setRequestHeader("Authorization", "Bearer " + token);
