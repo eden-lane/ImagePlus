@@ -1,9 +1,8 @@
 chrome.identity.getAuthToken({'interactive': true}, function (token) {
-  console.log(token);
+
 })
 
 var USER_INFO = 'https://picasaweb.google.com/data/feed/api/user/default',
-    TEST_ID = 'https://picasaweb.google.com/data/feed/api/user/107068484345384148331/albumid/6004394524595870353',
     ICON_URL = chrome.extension.getURL('img/icon128.png');
 
 /*
