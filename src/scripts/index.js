@@ -32,9 +32,9 @@ var reloadAlbums = function (callback) {
  * Building context menu for albums that matches
  * patterns
  * @param {array} albums - array of albums
- * @param {Number} parentId - id of main extension's menu item
+ * @param {function} callback - fired after list filling
  */
-var buildMenu = function (albums, parentId) {
+var buildMenu = function (albums, callback) {
   chrome.storage.sync.get("isblack", function (it) {
     var toHide = it.isblack;
     chrome.storage.sync.get("patterns", function (it) {
@@ -54,7 +54,8 @@ var buildMenu = function (albums, parentId) {
             contexts: ["image"],
             onclick: sendToAlbum
           })
-      }
+      };
+      callback();
     })
   });
 };
@@ -101,12 +102,13 @@ var sendToAlbum = function (params) {
 };
 
 var createMenu = function () {
-  //chrome.contextMenus.create({ title: "Image+ Test", contexts: ["image"], "onclick": sendToAlbum, parentId: id });
+  chrome.contextMenus.removeAll();
   reloadAlbums(function (albums) {
-    buildMenu(albums);
+    buildMenu(albums, function (){
+      chrome.contextMenus.create({ type: "separator", contexts: ["image"]});
+      chrome.contextMenus.create({ title: chrome.i18n.getMessage("reload"), contexts: ["image"], onclick: createMenu});
+    });
   });
-
-  chrome.contextMenus.create({ title: "Reload", contexts: ["image"], onclick: reloadAlbums});
 };
 
 

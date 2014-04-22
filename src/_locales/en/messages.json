@@ -41,5 +41,9 @@
 
 	"savingError": {
 		"message": "Saving error."
-	}
+	},
+
+    "reload": {
+        "message": "Reload"
+    }
 }
