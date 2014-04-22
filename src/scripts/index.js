@@ -5,27 +5,59 @@ chrome.identity.getAuthToken({'interactive': true}, function (token) {
 var USER_INFO = 'https://picasaweb.google.com/data/feed/api/user/default',
     TEST_ID = 'https://picasaweb.google.com/data/feed/api/user/107068484345384148331/albumid/6004394524595870353',
     ICON_URL = chrome.extension.getURL('img/icon128.png');
-    //https://picasaweb.google.com/data/feed/api/user/userID/albumid/albumID
 
 /*
  * Reloading list of albums
  */
-var reloadAlbums = function () {
+var reloadAlbums = function (callback) {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', USER_INFO, true);
   xhr.onload = function (e) {
     if (this.status == 200) {
       var id, title,
+          albums = [],
           all = e.target.responseXML.getElementsByTagName("entry");
       for (var i = 0, l = all.length; i < l; i++) {
         id = all[i].getElementsByTagName("id")[0].innerHTML;
         title = all[i].getElementsByTagName("title")[0].innerHTML;
+        albums.push({id: id, title: title});
       };
+      callback(albums);
     }
   };
   xhr.send(null);
 };
 
+/*
+ * Building context menu for albums that matches
+ * patterns
+ * @param {array} albums - array of albums
+ * @param {Number} parentId - id of main extension's menu item
+ */
+var buildMenu = function (albums, parentId) {
+  chrome.storage.sync.get("isblack", function (it) {
+    var toHide = it.isblack;
+    chrome.storage.sync.get("patterns", function (it) {
+      var patterns = it.patterns;
+      for (var i = 0, max = albums.length; i < max; i++) {
+        var matched = false;
+        for (var x = 0, l = patterns.length; x < l; x++) {
+          var reg = new RegExp(patterns[x]);
+          if (reg.test(albums[i].title)) {
+            matched = true;
+            break;
+          }
+        };
+        if (matched != toHide)
+          chrome.contextMenus.create({
+            title: albums[i].title,
+            contexts: ["image"],
+            onclick: sendToAlbum
+          })
+      }
+    })
+  });
+};
 
 var notificate = function (isSuccess, imageUrl) {
   chrome.notifications.create("", {
@@ -69,10 +101,12 @@ var sendToAlbum = function (params) {
 };
 
 var createMenu = function () {
-  var id = chrome.contextMenus.create({ title: "Image+", contexts: ["image"]});
-  chrome.contextMenus.create({ title: "Image+ Test", contexts: ["image"], "onclick": sendToAlbum, parentId: id });
+  //chrome.contextMenus.create({ title: "Image+ Test", contexts: ["image"], "onclick": sendToAlbum, parentId: id });
+  reloadAlbums(function (albums) {
+    buildMenu(albums);
+  });
 
-  chrome.contextMenus.create({ title: "Reload", contexts: ["image"], onclick: reloadAlbums, parentId: id });
+  chrome.contextMenus.create({ title: "Reload", contexts: ["image"], onclick: reloadAlbums});
 };
 
 
