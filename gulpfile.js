@@ -3,7 +3,8 @@ var gulp = require('gulp'),
     debug = require('gulp-debug');
 
 var files = [
-  'src/**'
+  'src/**',
+  '!src/*.dev*'
 ];
 
 gulp.task('build', function () {
