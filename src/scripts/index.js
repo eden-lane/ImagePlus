@@ -49,6 +49,7 @@ var buildMenu = function (albums, callback) {
         };
         if (matched != toHide)
           chrome.contextMenus.create({
+            id: albums[i].id,
             title: albums[i].title,
             contexts: ["image"],
             onclick: sendToAlbum
@@ -70,8 +71,9 @@ var notificate = function (isSuccess, imageUrl) {
 }
 
 var sendToAlbum = function (params) {
-  var albumId = TEST_ID,
-      url = params.srcUrl;
+  var albumId = params.menuItemId.replace('entry', 'feed'),
+      url = params.srcUrl,
+      slug = url.split('/').pop();
 
   var xhr = new XMLHttpRequest();
   xhr.open('GET', url, true);
@@ -83,7 +85,7 @@ var sendToAlbum = function (params) {
       xhr.open('POST', albumId, true);
       xhr.setRequestHeader("GData-Version", '3.0');
       xhr.setRequestHeader("Content-Type", 'image/jpeg');
-      xhr.setRequestHeader("Slug", "MyTestImage");
+      xhr.setRequestHeader("Slug", slug);
       xhr.onload = function () {
         if (xhr.status == 201) {
           notificate(true, url);
@@ -103,7 +105,7 @@ var sendToAlbum = function (params) {
 var createMenu = function () {
   chrome.contextMenus.removeAll();
   reloadAlbums(function (albums) {
-    buildMenu(albums, function (){
+    buildMenu(albums, function () {
       chrome.contextMenus.create({ type: "separator", contexts: ["image"]});
       chrome.contextMenus.create({ title: chrome.i18n.getMessage("reload"), contexts: ["image"], onclick: createMenu});
     });
